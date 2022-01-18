@@ -1,10 +1,21 @@
 const Product = require("../models/product");
 
-exports.getProducts = (req, res, next) => {
-  res.status(200).json({
-    success: true,
-    message: "This shows all products",
-  });
+// find()=== SELECT * from x
+exports.getProducts =async (req, res, next) => {
+  try {
+    const getAllProducts = await Product.find();
+
+    res.status(200).json({
+      success: true,
+      // message: "This shows all products",
+      count:getAllProducts.length,
+      getAllProducts
+    });
+    console.log("Number of Products available in Database : ",getAllProducts.length);
+  } catch (error) {
+    console.log(error.message);
+  }
+
 };
 
 // Create new product => ("/api/v1/admin/product/new") [method : "POST"]
