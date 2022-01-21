@@ -25,7 +25,7 @@ module.exports = (err, req, res, next) => {
     error.message = err.message;
 
     // Wrong mongoose ID
-    if (err.name === "castError") {
+    if (err.name === "CastError") {
       const message = `Resources not found. Invalid : ${err.path}`;
 
       error = new ErrorHandler(message, 400);
