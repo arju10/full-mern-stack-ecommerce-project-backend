@@ -12,4 +12,14 @@ module.exports = (err, req, res, next) => {
             stack : err.stack
         })
     }
+
+    if(process.env.NODE_ENV === "PRODUCTION"){
+        error = {...err};
+        error.message = err.message;
+
+        res.status(err.statusCode).json({
+            success : false,
+            error : error.message || "Internal Server Error!"
+        })
+    }
 }
