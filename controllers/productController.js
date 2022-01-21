@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 const ErrorHandler = require("../utils/errorHandler");
+const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
+
 // Display all products => ("/api/v1/products") [method : "GET"]
 exports.getProducts = async (req, res, next) => {
   try {
@@ -21,28 +23,50 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
-// Get Single Product Details => ("/api/v1/product/:id") [method:"GET"]
-exports.getSingleProduct = async (req, res, next) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if(!product){
-      return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
+// Get Single Product Details => ("/api/v1/product/:id") [method:"GET"]     (try .. catch >>>> use for Handling Async Error )
 
-      // return res.status(404).json({
-      //   success: false,
-      //   message : "Product not found"
-      // })
-    }
+// exports.getSingleProduct = async (req, res, next) => {
+//   try {
+//     const product = await Product.findById(req.params.id);
+//     if(!product){
+//       return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
 
-    res.status(200).json({
-      success: true,
-      product
-    })
-  } catch (error) {
-    console.log(error.message);
+//       // return res.status(404).json({
+//       //   success: false,
+//       //   message : "Product not found"
+//       // })
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       product
+//     })
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+// Get Single Product Details => ("/api/v1/product/:id") [method:"GET"]  (Alternative) = > Apply catchAsyncError for handling Async Error
+
+exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
+ 
+  const product = await Product.findById(req.params.id);
+  if(!product){
+    return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
+
+    // return res.status(404).json({
+    //   success: false,
+    //   message : "Product not found"
+    // })
   }
-};
 
+  res.status(200).json({
+    success: true,
+    product
+  })
+
+}
+);
 
 // Create new product => ("/api/v1/admin/product/new") [method : "POST"]
 // exports.newProduct = async(res, req, next) => {
@@ -77,7 +101,7 @@ exports.updateProduct = async (req, res, next) => {
   if (!product) {
     return res.status(404).json({
       success: true,
-      message: "Product isn't updated",
+      message: "Product isn't found",
     });
   }
   // Saving/Updating the product
