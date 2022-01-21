@@ -4,7 +4,6 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 
 // Display all products => ("/api/v1/products") [method : "GET"] (Alternative but best method) = > Apply catchAsyncError for handling Async Error
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
-  
   // find()=== SELECT * from x
   const getAllProducts = await Product.find();
 
@@ -18,36 +17,24 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
     "Number of Products available in Database : ",
     getAllProducts.length
   );
-
 });
-
 
 // Get Single Product Details => ("/api/v1/product/:id") [method:"GET"]  (Alternative but best method) = > Apply catchAsyncError for handling Async Error
 
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
- 
   const product = await Product.findById(req.params.id);
-  if(!product){
-    return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
-
-    // return res.status(404).json({
-    //   success: false,
-    //   message : "Product not found"
-    // })
+  if (!product) {
+    return next(new ErrorHandler("Product not found!", 404)); // Apply Error Handler Class to control error!
   }
 
   res.status(200).json({
     success: true,
-    product
-  })
-
-}
-);
-
+    product,
+  });
+});
 
 // create new product => ("/api/v1/product/new") [method : 'POST']  (Alternative async error handle)
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
- 
   // Saving Data to the Database
   const product = await Product.create(req.body);
   res.status(201).json({
@@ -56,18 +43,14 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
     message: "Product is created successfully!",
   });
   console.log("Product is created successfully!!!!");
-
 });
-
-
-
 
 // Update product => ("/api/v1/admin/product/:id") [method : "PUT"] (Alternative async error handle)
 exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   // Finding the product
   let product = await Product.findById(req.params.id);
   if (!product) {
-    return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
+    return next(new ErrorHandler("Product not found!", 404)); // Apply Error Handler Class to control error!
   }
   // Saving/Updating the product
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -81,17 +64,14 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     product,
     message: "Product is updated successfully",
   });
-}
-)
-
+});
 
 // Delete product from database => ("/api/v1/admin/product/:id") [method : "DELETE"] (Alternative async error handle)
 exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
-  
   // Finding the product
   const product = await Product.findById(req.params.id);
-  if(!product){
-    return next(new ErrorHandler("Product not found!", 404));  // Apply Error Handler Class to control error!
+  if (!product) {
+    return next(new ErrorHandler("Product not found!", 404)); // Apply Error Handler Class to control error!
   }
 
   // Deleting the product
@@ -99,13 +79,9 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
   product.remove();
   res.status(200).json({
     success: true,
-    message:"Product is Deleted Successfully!"
+    message: "Product is Deleted Successfully!",
   });
-
 });
-
-
-
 
 // // Display all products => ("/api/v1/products") [method : "GET"] (try .. catch >>>> use for Handling Async Error )
 // exports.getProducts = async (req, res, next) => {
