@@ -7,7 +7,8 @@ const APIFeatures = require("../utils/apiFeatures");
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   // find()=== SELECT * from x
   // const getAllProducts = await Product.find();
-  const apiFeatures = new APIFeatures(Product.find(), req.query).search();
+  console.log(req.query);
+  const apiFeatures = new APIFeatures(Product.find(), req.query).search().filter();
   const getAllProducts = await apiFeatures.query;
 
   res.status(200).json({
