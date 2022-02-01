@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const app = express();
 
 const errorMiddle = require("./middlewares/errors");
+// Parsing URL encoded body
+app.use(express.urlencoded({extended: false}));
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
