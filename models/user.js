@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please enter your name"],
-    maxlength: [30, "Your name cannot exceed 30 characters"],
+    maxLength: [30, "Your name cannot exceed 30 characters"],
   },
   email: {
     type: String,
@@ -39,3 +41,5 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   restPasswordExpire: Date,
 });
+
+module.exports = mongoose.model("user",userSchema);
