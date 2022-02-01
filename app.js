@@ -15,8 +15,11 @@ app.use(bodyParser.json())
 
 // import all Product routes
 const products = require("./routes/product");
+app.use("/api/v1",products);
 
-app.use("/api/v1/",products);
+// import all user routes
+const auth = require("./routes/auth");
+app.use("/api/v1", auth);
 
 // Middleware to handle error
 // RUNS AFTER THE ROUTES BUT BEFORE THE CONTROLLER
