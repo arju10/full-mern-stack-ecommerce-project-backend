@@ -10,7 +10,10 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   console.log(req.query);
   const resPerPage = 2;
 
-  const apiFeatures = new APIFeatures(Product.find(), req.query).search().filter().pagination(resPerPage);
+  const apiFeatures = new APIFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(resPerPage);
   const getAllProducts = await apiFeatures.query;
 
   res.status(200).json({
@@ -41,6 +44,9 @@ exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
 
 // create new product => ("/api/v1/product/new") [method : 'POST']  (Alternative async error handle)
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
+  // console.log(user);
+  req.body.user = req.user.id;
+
   // Saving Data to the Database
   const product = await Product.create(req.body);
   res.status(201).json({
