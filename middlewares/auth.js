@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 // Check if user is authenticated or not
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
-  const { token } = req.cookie;
+  const { token } = req.cookies;
   // console.log(token);
 
   // If no token is provided
