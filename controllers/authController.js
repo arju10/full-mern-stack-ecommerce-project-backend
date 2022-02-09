@@ -85,7 +85,7 @@ exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Update / Change Password => /api/v1/password/update
+// Update/Change Password => /api/v1/password/update [PUT]
 exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
   // Check Previous user password
@@ -96,4 +96,23 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   user.password = req.body.password;
   await user.save();
   sendToken(user, 200, res);
+});
+
+// Update user profile => "/api/v1/me/updateProfile" [PUT]
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  // Update avatar TODO
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    useFindAndModify: false
+  });
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
