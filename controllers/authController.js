@@ -108,8 +108,21 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   // Update avatar TODO
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
-    useFindAndModify: false
+    useFindAndModify: false,
   });
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Admin routes
+
+// Get All Users =..> "api/v1/admin/allUsers" ['GET']
+
+exports.allUsers = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.find();
 
   res.status(200).json({
     success: true,
