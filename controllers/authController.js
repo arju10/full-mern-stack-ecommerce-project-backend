@@ -119,7 +119,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Admin routes
 
-// Get All Users =..> "api/v1/admin/allUsers" ['GET']
+// Get All Users => "api/v1/admin/allUsers" ['GET']
 
 exports.allUsers = catchAsyncErrors(async (req, res, next) => {
   const user = await User.find();
@@ -129,3 +129,18 @@ exports.allUsers = catchAsyncErrors(async (req, res, next) => {
     user,
   });
 });
+
+
+// Get Single User Details => "api/v1/admin/user/:id" ["GET"]
+exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if(!user){
+    return next(new ErrorHandler("User does not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    user
+  })
+})
