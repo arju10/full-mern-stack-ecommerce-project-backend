@@ -24,6 +24,10 @@ app.use("/api/v1", products);
 const auth = require("./routes/auth");
 app.use("/api/v1", auth);
 
+// Import all order route
+const order = require("./routes/order.js")
+app.use("/api/v1/", order);
+
 // Middleware to handle error
 // RUNS AFTER THE ROUTES BUT BEFORE THE CONTROLLER
 app.use(errorMiddle);
