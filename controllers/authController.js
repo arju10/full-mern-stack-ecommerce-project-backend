@@ -166,7 +166,7 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Delete user by admin => "/api/v1/admin/delete/:id" ["DELETE"]
+// Delete user by admin => "/api/v1/admin/user/:id" ["DELETE"]
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   // Find the user
   const user = await User.findById(req.params.id);
