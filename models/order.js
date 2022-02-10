@@ -11,7 +11,7 @@ const orderSchema = mongoose.Schema({
       required: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     postalCode: {
@@ -67,6 +67,7 @@ const orderSchema = mongoose.Schema({
 
   paidAt: {
     type: Date,
+    required:true
   },
   itemsPrice: {
     type: Number,
