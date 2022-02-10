@@ -130,17 +130,34 @@ exports.allUsers = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
 // Get Single User Details => "api/v1/admin/user/:id" ["GET"]
 exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
-  if(!user){
+  if (!user) {
     return next(new ErrorHandler("User does not found", 404));
   }
 
   res.status(200).json({
     success: true,
-    user
-  })
-})
+    user,
+  });
+});
+
+// Update user profile  by admin => "/api/v1/admin/update/:id" ["PUT"]
+exports.updateUser = catchAsyncErrors(async (req, res, next) => {
+  const newUser = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUser, {
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});

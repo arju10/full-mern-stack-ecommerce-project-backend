@@ -22,7 +22,7 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
 // HandLing users routes
 exports.authorizeRoles = (...roles) => {
-  console.log(roles);
+  // console.log(roles);
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
@@ -35,3 +35,4 @@ exports.authorizeRoles = (...roles) => {
     next();
   };
 };
+
