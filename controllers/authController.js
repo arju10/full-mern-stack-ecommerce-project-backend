@@ -108,6 +108,8 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   // Update avatar TODO
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators:true,
     useFindAndModify: false,
   });
 
@@ -153,6 +155,8 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
   };
 
   const user = await User.findByIdAndUpdate(req.params.id, newUser, {
+    new: true,
+    runValidators:true,
     useFindAndModify: false,
   });
 
