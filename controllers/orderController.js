@@ -36,25 +36,46 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
 
 // Get Single Order => "/api/v1/order/:id" ["GET"]
 exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate("user", "name email");
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "name email"
+  );
   if (!order) {
     return next(new ErrorHandler("No order found with this ID"), 404);
   }
 
   res.status(200).json({
     success: true,
-    order
+    order,
   });
 });
 
 // Get All Orders => "/api/v1/orders/me" ["GET"]
 exports.myOrder = catchAsyncErrors(async (req, res, next) => {
-    const orders = await Order.find({
-        user:req.user._id
-    });
+  const orders = await Order.find({
+    user: req.user._id,
+  });
 
-    res.status(200).json({
-        success: true,
-        orders
-    })
-})
+  res.status(200).json({
+    success: true,
+    orders,
+  });
+});
+
+// Admin
+
+// Get all orders - ADMIN - "/api/v1/admin/orders"  ["GET"]
+exports.allOrders = catchAsyncErrors(async (req, res, next) => {
+  const orders = await Order.find();
+  let totalAmount = 0;
+
+  orders.forEach((order) => {
+    totalAmount = totalAmount + order.totalPrice;
+  });
+
+  res.status(200).json({
+    success: true,
+    totalAmount,
+    orders,
+  });
+});
