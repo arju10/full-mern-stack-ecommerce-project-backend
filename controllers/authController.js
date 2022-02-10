@@ -161,3 +161,22 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
     user,
   });
 });
+
+// Delete user by admin => "/api/v1/admin/delete/:id" ["DELETE"]
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  // Find the user
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler("User does not found"), 404);
+  }
+
+  // Delete Avatar from Cloudinary  [TODO]
+
+  user.remove();
+
+  res.status(200).json({
+    success: true,
+    message: "User Deleted successfully!",
+  });
+});
