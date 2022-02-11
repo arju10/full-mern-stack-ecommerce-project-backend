@@ -123,10 +123,22 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
     product.numberOfReviews = product.reviews.length;
   }
 
-  product.ratings = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
+  product.ratings =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
   await product.save({ validateBeforeSave: false });
   res.status(200).json({
     success: true,
+  });
+});
+
+// GET PRODUCT Reviews => api/v1/reviews ["GET"]
+exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+
+  res.status(200).json({
+    success: true,
+    reviews: product.reviews,
   });
 });
 
