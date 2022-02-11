@@ -111,17 +111,17 @@ async function updateStock(id, quantity) {
 }
 
 // Delete Order -ADMIN => "/api/v1/admin/order/:id"  ["DELETE"]
-exports.deleteOrder = catchAsyncErrors(async (req, res, next) =>{
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-  if(!order){
-    return next(new ErrorHandler ("No order found with this ID", 404));
+  if (!order) {
+    return next(new ErrorHandler("No order found with this ID", 404));
   }
 
   await order.remove();
 
   res.status(200).json({
     success: true,
-    message:"Order is deleted successfully!",
+    message: "Order is deleted successfully!",
     // order
-  })
-})
+  });
+});
