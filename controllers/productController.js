@@ -142,6 +142,37 @@ exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// DELETE PRODUCT REVIEWS => /api/v1/reviews [DELETE] [Pid, id]
+exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.productId);
+
+  const reviews = product.reviews.filter(
+    (review) => review.user.toString() !== req.query.id.toString()
+  );
+
+  const numberOfReviews = reviews.length;
+  const ratings =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await Product.findByIdAndUpdate(
+    req.query.productId,
+    {
+      reviews,
+      ratings,
+      numberOfReviews,
+    },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+  res.status(200).json({
+    success: true,
+  });
+});
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>> ALL ALTERNATIVE WAY >>>>>>>>>>>>>>>>>>>>>>>>>
 
 // // Display all products => ("/api/v1/products") [method : "GET"] (try .. catch >>>> use for Handling Async Error )
