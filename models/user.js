@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
   resetPasswordToken: String,
-  restPasswordExpire: Date,
+  resetPasswordExpire: Date,
 });
 
 // Encrypting the Password
@@ -75,7 +75,7 @@ userSchema.methods.getResetPasswordToken = function () {
     .update(resetToken)
     .digest("hex");
   // Set Token Expire time
-  this.restPasswordExpire = Date.now() + 30 * 60 * 1000;
+  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
   return resetToken;
 };
 module.exports = mongoose.model("user", userSchema);

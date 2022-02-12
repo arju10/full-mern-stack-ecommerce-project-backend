@@ -223,3 +223,35 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// Reset Password => /api/v1/password/reset/:token   []
+exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
+  const { password, confirhPassword } = req.body;
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        "Password Reset token is invalid or have been expired",
+        400
+      )
+    );
+  }
+  if (password !== confirmPassword) {
+    return next (new ErrorHandler('Password does not match', 400))
+}
+
+// Setup new Password
+user.password = password 
+user.resetPasswordToken = undefined
+user.resetPasswordExpire = undefined 
+await user.save()
+sendToken (user, 200, res)
+
+
+});
